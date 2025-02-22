@@ -4,12 +4,13 @@ import Image from "next/image";
 import circle from "@/assets/circle-chevron-left.svg";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/lib/axios";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
+import { UserRequest } from "@/components/dataTable/columns";
 
 const UserFormSchema = z.object({
   name: z
@@ -44,35 +45,69 @@ export default function Add() {
     resolver: zodResolver(UserFormSchema),
   });
 
+  const [objectRequest, setObjectRequest] = useState<UserRequest>(
+    {} as UserRequest
+  );
+
   async function handleFormSubmit(data: UserFormData) {
-    try {
-      const result = await api.post("/users", {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        birthdate: data.birthdate,
-        address: data.address,
-      });
+    if (objectRequest.type != "update") {
+      try {
+        const result = await api.post("/users", {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          birthdate: data.birthdate,
+          address: data.address,
+        });
 
-      if (result.status !== 201) {
-        throw new Error();
+        if (result.status !== 201) {
+          throw new Error();
+        }
+
+        reset();
+        toast("Dados cadastrados com sucesso!", {
+          style: {
+            backgroundColor: "#16A34A",
+            color: "white",
+          },
+        });
+      } catch (err) {
+        toast("Erro ao cadastrar usuário.Contate o suporte técnico.", {
+          style: {
+            backgroundColor: "#DC2626",
+            color: "white",
+          },
+        });
       }
+    } else {
+      try {
+        const userUpdate = await api.put("/users", {
+          id: objectRequest.id,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          birthdate: data.birthdate,
+          address: data.address,
+        });
 
-      reset();
-      toast("Dados cadastrados com sucesso!", {
-        style: {
-          backgroundColor: "#16A34A",
-          color: "white",
-        },
-      });
-    } catch (err) {
-      toast("Erro inesperado. Contate o suporte técnico", {
-        style: {
-          backgroundColor: "#DC2626",
-          color: "white",
-        },
-      });
-      console.log(err);
+        if (userUpdate.status !== 202) {
+          throw new Error();
+        }
+
+        toast("Dados cadastrados com sucesso!", {
+          style: {
+            backgroundColor: "#16A34A",
+            color: "white",
+          },
+        });
+      } catch (err) {
+        toast("Erro ao atualizar usuário.Contate o suporte técnico.", {
+          style: {
+            backgroundColor: "#DC2626",
+            color: "white",
+          },
+        });
+      }
     }
   }
 
@@ -80,6 +115,9 @@ export default function Add() {
     const savedUser = localStorage.getItem("userToEdit");
     if (savedUser) {
       const objectUser = JSON.parse(savedUser);
+
+      setObjectRequest(objectUser);
+
       setValue("name", objectUser.name);
       setValue("email", objectUser.email);
       setValue("phone", objectUser.phone);
@@ -98,7 +136,6 @@ export default function Add() {
             <Image src={circle} alt="voltar" />
           </Link>
           <h1 className="font-semibold text-3xl mb-8">Cadastrar Cliente</h1>
-          <Toaster position="top-right" />
         </div>
         <div className="p-6 bg-[#27272A] w-full rounded-md">
           <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -161,7 +198,15 @@ export default function Add() {
                 </div>
               </div>
               <div className="w-full flex justify-end gap-2">
-                <Button className="bg-[#4B4B4B] text-base">Cancelar</Button>
+                <Button
+                  type="button"
+                  className="bg-[#4B4B4B] text-base"
+                  onClick={() => {
+                    reset();
+                  }}
+                >
+                  Cancelar
+                </Button>
                 <Button
                   disabled={isSubmitting}
                   type="submit"

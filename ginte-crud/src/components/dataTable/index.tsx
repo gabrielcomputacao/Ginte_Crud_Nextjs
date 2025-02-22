@@ -21,6 +21,7 @@ import {
   TableCell,
   Table,
 } from "../ui/table";
+import { User } from "./columns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

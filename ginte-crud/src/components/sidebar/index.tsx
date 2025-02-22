@@ -38,8 +38,8 @@ export const AppSiderbar = () => {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuButton asChild className="w-full">
+              {items.map((item, index) => (
+                <SidebarMenuButton asChild className="w-full" key={index}>
                   <Link href={item.url}>
                     <div className="flex gap-3 items-center">
                       <Image

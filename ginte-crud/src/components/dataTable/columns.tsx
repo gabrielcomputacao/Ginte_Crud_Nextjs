@@ -8,7 +8,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export type User = {
@@ -18,6 +17,11 @@ export type User = {
   phone: string;
   birthdate: string;
   address: string;
+  created_at?: string;
+};
+
+export type UserRequest = User & {
+  type: string;
 };
 
 export const columns: ColumnDef<User>[] = [
@@ -52,45 +56,33 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          E-mail
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: () => <div className="text-left">E-mail</div>,
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
     accessorKey: "phone",
-    header: () => <div className="text-right">Telefone</div>,
+    header: () => <div className="text-left">Telefone</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-right font-medium">{row.getValue("phone")}</div>
+        <div className="text-left font-medium">{row.getValue("phone")}</div>
       );
     },
   },
   {
     accessorKey: "birthdate",
-    header: () => <div className="text-right">Nascimento</div>,
+    header: () => <div className="text-left">Nascimento</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-right font-medium">
-          {row.getValue("birthdate")}
-        </div>
+        <div className="text-left font-medium">{row.getValue("birthdate")}</div>
       );
     },
   },
   {
     accessorKey: "address",
-    header: () => <div className="text-right">Endereco</div>,
+    header: () => <div className="text-left">Endereco</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-right font-medium">{row.getValue("address")}</div>
+        <div className="text-left font-medium">{row.getValue("address")}</div>
       );
     },
   },
@@ -102,7 +94,10 @@ export const columns: ColumnDef<User>[] = [
       const user = row.original;
 
       const handleEdit = () => {
-        localStorage.setItem("userToEdit", JSON.stringify(user));
+        localStorage.setItem(
+          "userToEdit",
+          JSON.stringify({ ...user, type: "update" })
+        );
         router.push("/add");
       };
 
