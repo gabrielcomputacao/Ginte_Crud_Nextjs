@@ -16,7 +16,7 @@ export type User = {
   name: string;
   email: string;
   phone: string;
-  birth: string;
+  birthdate: string;
   address: string;
 };
 
@@ -75,11 +75,13 @@ export const columns: ColumnDef<User>[] = [
     },
   },
   {
-    accessorKey: "birth",
+    accessorKey: "birthdate",
     header: () => <div className="text-right">Nascimento</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-right font-medium">{row.getValue("birth")}</div>
+        <div className="text-right font-medium">
+          {row.getValue("birthdate")}
+        </div>
       );
     },
   },

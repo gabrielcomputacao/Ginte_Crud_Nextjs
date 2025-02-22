@@ -11,7 +11,7 @@ const users: User[] = [
     name: "John Doe",
     email: "johndoe@example.com",
     phone: "(123) 456-7890",
-    birth: "1990-05-15",
+    birthdate: "1990-05-15",
     address: "123 Main St, Springfield, IL",
   },
   {
@@ -19,7 +19,7 @@ const users: User[] = [
     name: "Jane Smith",
     email: "janesmith@example.com",
     phone: "(987) 654-3210",
-    birth: "1985-08-22",
+    birthdate: "1985-08-22",
     address: "456 Elm St, Shelbyville, IL",
   },
   {
@@ -27,7 +27,7 @@ const users: User[] = [
     name: "Michael Johnson",
     email: "michaelj@example.com",
     phone: "(555) 123-4567",
-    birth: "1992-11-30",
+    birthdate: "1992-11-30",
     address: "789 Oak St, Capital City, IL",
   },
   {
@@ -35,7 +35,7 @@ const users: User[] = [
     name: "Emily Davis",
     email: "emilyd@example.com",
     phone: "(222) 333-4444",
-    birth: "1988-07-19",
+    birthdate: "1988-07-19",
     address: "321 Pine St, Ogdenville, IL",
   },
   {
@@ -43,7 +43,7 @@ const users: User[] = [
     name: "David Wilson",
     email: "davidw@example.com",
     phone: "(777) 888-9999",
-    birth: "1995-03-25",
+    birthdate: "1995-03-25",
     address: "654 Cedar St, North Haverbrook, IL",
   },
 ];
