@@ -71,8 +71,8 @@ export default function Add() {
             color: "white",
           },
         });
-      } catch (err) {
-        toast("Erro ao cadastrar usuário.Contate o suporte técnico.", {
+      } catch (err: any) {
+        toast(err.response?.data?.message, {
           style: {
             backgroundColor: "#DC2626",
             color: "white",
@@ -100,8 +100,8 @@ export default function Add() {
             color: "white",
           },
         });
-      } catch (err) {
-        toast("Erro ao atualizar usuário.Contate o suporte técnico.", {
+      } catch (err: any) {
+        toast(err.response?.data?.message, {
           style: {
             backgroundColor: "#DC2626",
             color: "white",
@@ -135,7 +135,11 @@ export default function Add() {
           <Link href={"/"} className="h-8 mt-1">
             <Image src={circle} alt="voltar" />
           </Link>
-          <h1 className="font-semibold text-3xl mb-8">Cadastrar Cliente</h1>
+          <h1 className="font-semibold text-3xl mb-8">
+            {objectRequest.name
+              ? `Editando: ${objectRequest.name}`
+              : "Cadastrar Cliente"}
+          </h1>
         </div>
         <div className="p-6 bg-[#27272A] w-full rounded-md">
           <form onSubmit={handleSubmit(handleFormSubmit)}>

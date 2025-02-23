@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   SortingState,
   ColumnFiltersState,
@@ -21,16 +21,17 @@ import {
   TableCell,
   Table,
 } from "../ui/table";
-import { User } from "./columns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onChangeSelectedIds: (value: any) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onChangeSelectedIds,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -58,6 +59,10 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
+
+  useEffect(() => {
+    onChangeSelectedIds(table.getSelectedRowModel());
+  }, [table.getSelectedRowModel()]);
 
   return (
     <div className="w-full mt-6">
