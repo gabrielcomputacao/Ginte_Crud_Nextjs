@@ -65,7 +65,7 @@ export default function Add() {
         }
 
         reset();
-        toast("Dados cadastrados com sucesso!", {
+        toast("Usuário cadastrado com sucesso!", {
           style: {
             backgroundColor: "#16A34A",
             color: "white",
@@ -94,7 +94,7 @@ export default function Add() {
           throw new Error();
         }
 
-        toast("Dados cadastrados com sucesso!", {
+        toast("Usuário atualizado com sucesso!", {
           style: {
             backgroundColor: "#16A34A",
             color: "white",

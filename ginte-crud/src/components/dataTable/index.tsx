@@ -21,16 +21,19 @@ import {
   TableCell,
   Table,
 } from "../ui/table";
+import { Skeleton } from "../ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onChangeSelectedIds: (value: any) => void;
+  isLoading: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  isLoading = false,
   onChangeSelectedIds,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -52,6 +55,11 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    initialState: {
+      pagination: {
+        pageSize: 5,
+      },
+    },
     state: {
       sorting,
       columnFilters,
@@ -87,7 +95,30 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody className="border-[#3F3F46]">
-            {table.getRowModel().rows?.length ? (
+            {!isLoading ? (
+              [...Array(5)].map((_, index) => (
+                <TableRow key={index} className="border-[#3F3F46]">
+                  <TableCell>
+                    <Skeleton className="h-4 w-7 bg-gray-400" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-32 bg-gray-400" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-48 bg-gray-400" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-48 bg-gray-400" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-48 bg-gray-400" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-48 bg-gray-400" />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -119,7 +150,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredSelectedRowModel().rows.length} de{" "}
           {table.getFilteredRowModel().rows.length} linha(s) selecionadas.
         </div>
         <div className="space-x-2 text-white">
