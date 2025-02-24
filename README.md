@@ -2,7 +2,12 @@
 
 rodar npm install
 criar o .env e colocar a variável = DATABASE_URL="file:./dev.db"
+npx prisma migrate dev
 rodar npm run dev
+
+#### Para visualizar o banco de dados tem o comando
+
+npx prisma studio
 
 ### Tecnologias usadas
 

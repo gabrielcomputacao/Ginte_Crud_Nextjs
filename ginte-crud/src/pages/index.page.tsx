@@ -31,6 +31,7 @@ export default function Home() {
   const [selectedIds, setSelectedIds] = useState<any[]>([]);
   const inputSearch = watch("search");
   const [isLoading, setIsLoading] = useState(false);
+  const [openDialong, setOpenDialog] = useState(false);
 
   function onChangeSelectedIds(value: any) {
     const listUsers = value.rows;
@@ -83,6 +84,7 @@ export default function Home() {
         throw new Error();
       }
 
+      setOpenDialog(false);
       getUsers();
 
       toast("Usuários deletados com sucesso!", {
@@ -131,7 +133,7 @@ export default function Home() {
               />
             </div>
             <div className="">
-              <Dialog>
+              <Dialog open={openDialong} onOpenChange={setOpenDialog}>
                 <DialogTrigger asChild>
                   <Button
                     type="button"
@@ -177,7 +179,7 @@ export default function Home() {
                       </Button>
                     </DialogClose>
                     <Button
-                      className="bg-[#dc2626] text-white text-base"
+                      className="bg-[#dc2626] text-white text-base hover:bg-[#ec9696]"
                       type="button"
                       variant="secondary"
                       onClick={deleteUsers}

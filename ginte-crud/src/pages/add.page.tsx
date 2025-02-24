@@ -9,15 +9,23 @@ import phone from "@/assets/phone.svg";
 import mail from "@/assets/mail.svg";
 import calendar from "@/assets/calendar-days.svg";
 import map from "@/assets/map-pin.svg";
+import pencil from "@/assets/pencil.svg";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/lib/axios";
 import { toast } from "sonner";
 import { UserRequest } from "@/components/dataTable/columns";
+import {
+  applyBirthDate,
+  applyPhoneMask,
+  formatPhone,
+  invertedDateToBr,
+  invertedDateToEua,
+} from "@/utils/masks";
 
 const UserFormSchema = z.object({
   name: z
@@ -25,17 +33,8 @@ const UserFormSchema = z.object({
     .min(3, { message: "Precisa ter pelo menos 3 letras" })
     .transform((value) => value.toLocaleLowerCase()),
   email: z.string().email("E-mail inválido"),
-  phone: z
-    .string()
-    .min(10, { message: "Precisa conter ddd e o número" })
-    .refine(
-      (phone) => {
-        const onlyNumbers = phone.replace(/\D/g, "");
-        return onlyNumbers.length === 10 || onlyNumbers.length === 11;
-      },
-      { message: "Precisa ser um número válido" }
-    ),
-  birthdate: z.string(),
+  phone: z.string().min(15, { message: "Precisa conter ddd e o número" }),
+  birthdate: z.string().min(10, { message: "Precisa ser uma data válida." }),
   address: z.string().transform((value) => value.toLocaleLowerCase()),
 });
 
@@ -47,6 +46,7 @@ export default function Add() {
     handleSubmit,
     reset,
     setValue,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<UserFormData>({
     resolver: zodResolver(UserFormSchema),
@@ -62,8 +62,8 @@ export default function Add() {
         const result = await api.post("/users", {
           name: data.name,
           email: data.email,
-          phone: data.phone,
-          birthdate: data.birthdate,
+          phone: formatPhone(data.phone),
+          birthdate: invertedDateToEua(data.birthdate),
           address: data.address,
         });
 
@@ -71,7 +71,13 @@ export default function Add() {
           throw new Error();
         }
 
-        reset();
+        reset({
+          birthdate: "",
+          phone: "",
+          address: "",
+          email: "",
+          name: "",
+        });
         toast("Usuário cadastrado com sucesso!", {
           style: {
             backgroundColor: "#16A34A",
@@ -127,8 +133,8 @@ export default function Add() {
 
       setValue("name", objectUser.name);
       setValue("email", objectUser.email);
-      setValue("phone", objectUser.phone);
-      setValue("birthdate", objectUser.birthdate);
+      setValue("phone", applyPhoneMask(objectUser.phone));
+      setValue("birthdate", invertedDateToBr(objectUser.birthdate));
       setValue("address", objectUser.address);
 
       localStorage.removeItem("userToEdit");
@@ -191,11 +197,22 @@ export default function Add() {
               <div className="flex gap-4">
                 <div className="flex flex-col w-full ">
                   <div className="w-full relative">
-                    <Input
-                      className="border-[#3F3F46] text-white px-4 py-3"
-                      placeholder="Telefone *"
-                      {...register("phone")}
-                    ></Input>
+                    <Controller
+                      name="phone"
+                      control={control}
+                      render={({ field: { onChange, value, ...rest } }) => (
+                        <Input
+                          className="border-[#3F3F46] text-white px-4 py-3"
+                          placeholder="Telefone *"
+                          value={value}
+                          onChange={(e) => {
+                            const maskedValue = applyPhoneMask(e.target.value);
+                            onChange(maskedValue);
+                          }}
+                          {...rest}
+                        />
+                      )}
+                    />
                     <Image
                       className="absolute right-2 top-[20%] "
                       src={phone}
@@ -208,10 +225,21 @@ export default function Add() {
                 </div>
                 <div className="flex flex-col w-full relative">
                   <div className="w-full relative">
-                    <Input
-                      className="border-[#3F3F46] text-white px-4 py-3"
-                      placeholder="Data de nascimento *"
-                      {...register("birthdate")}
+                    <Controller
+                      name="birthdate"
+                      control={control}
+                      render={({ field: { onChange, value, ...rest } }) => (
+                        <Input
+                          className="border-[#3F3F46] text-white px-4 py-3"
+                          placeholder="Data de nascimento *"
+                          value={value}
+                          onChange={(e) => {
+                            const maskedValue = applyBirthDate(e.target.value);
+                            onChange(maskedValue);
+                          }}
+                          {...rest}
+                        />
+                      )}
                     />
                     <Image
                       className="absolute right-2 top-[20%] "
@@ -248,7 +276,13 @@ export default function Add() {
                   type="button"
                   className="bg-[#4B4B4B] text-base"
                   onClick={() => {
-                    reset();
+                    reset({
+                      birthdate: "",
+                      phone: "",
+                      address: "",
+                      email: "",
+                      name: "",
+                    });
                   }}
                 >
                   Cancelar
@@ -258,8 +292,17 @@ export default function Add() {
                   type="submit"
                   className="flex gap-1 bg-[#16A34A] text-base justify-center items-center"
                 >
-                  Cadastrar
-                  <PlusIcon className="mt-[2px]" />
+                  {objectRequest.type ? (
+                    <div className="flex gap-2">
+                      Editar
+                      <Image src={pencil} alt="Editar" />
+                    </div>
+                  ) : (
+                    <>
+                      Cadastrar
+                      <PlusIcon className="mt-[2px]" />
+                    </>
+                  )}
                 </Button>
               </div>
             </div>

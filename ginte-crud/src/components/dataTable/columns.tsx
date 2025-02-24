@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { applyPhoneMask, invertedDateToBr } from "@/utils/masks";
 
 export type User = {
   id: string;
@@ -64,7 +65,9 @@ export const columns: ColumnDef<User>[] = [
     header: () => <div className="text-left">Telefone</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">{row.getValue("phone")}</div>
+        <div className="text-left font-medium">
+          {applyPhoneMask(row.getValue("phone"))}
+        </div>
       );
     },
   },
@@ -73,13 +76,15 @@ export const columns: ColumnDef<User>[] = [
     header: () => <div className="text-left">Nascimento</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">{row.getValue("birthdate")}</div>
+        <div className="text-left font-medium">
+          {invertedDateToBr(row.getValue("birthdate"))}
+        </div>
       );
     },
   },
   {
     accessorKey: "address",
-    header: () => <div className="text-left">Endereco</div>,
+    header: () => <div className="text-left">Endereço</div>,
     cell: ({ row }) => {
       return (
         <div className="text-left font-medium">{row.getValue("address")}</div>
