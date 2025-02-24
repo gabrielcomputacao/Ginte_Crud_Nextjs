@@ -95,7 +95,7 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody className="border-[#3F3F46]">
-            {!isLoading ? (
+            {isLoading ? (
               [...Array(5)].map((_, index) => (
                 <TableRow key={index} className="border-[#3F3F46]">
                   <TableCell>
@@ -123,7 +123,9 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="border-[#3F3F46]"
+                  className={`border-[#3F3F46] ${
+                    row.getIsSelected() ? "bg-[#27272A] hover:bg-[#27272A]" : ""
+                  } `}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

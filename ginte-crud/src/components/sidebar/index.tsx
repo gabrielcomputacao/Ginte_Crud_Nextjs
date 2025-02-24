@@ -6,10 +6,12 @@ import {
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
+  SidebarFooter,
 } from "../ui/sidebar";
 import Image from "next/image";
 import marca from "@/assets/marca.svg";
 import plus from "@/assets/plus.svg";
+import logout from "@/assets/log-out.svg";
 import people from "@/assets/users-round.svg";
 
 const items = [
@@ -57,6 +59,22 @@ export const AppSiderbar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="px-4 py-8">
+        <div className="w-full flex p-2">
+          <Link href="/">
+            <div className="flex gap-3 items-center">
+              <Image
+                src={logout}
+                alt="sair"
+                height={24}
+                width={24}
+                className="ml-2"
+              />
+              <span className="text-[#DC2626] text-base">Sair</span>
+            </div>
+          </Link>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 };

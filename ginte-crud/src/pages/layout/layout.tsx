@@ -6,7 +6,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     <div>
       <SidebarProvider>
         <AppSiderbar />
-        <main className="w-full">{children}</main>
+        <main className="w-full">
+          <div className="md:hidden">
+            <SidebarTrigger />
+          </div>
+          {children}
+        </main>
       </SidebarProvider>
     </div>
   );

@@ -1,7 +1,14 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import circle from "@/assets/circle-chevron-left.svg";
+import cursorText from "@/assets/text-cursor.svg";
+import phone from "@/assets/phone.svg";
+import mail from "@/assets/mail.svg";
+import calendar from "@/assets/calendar-days.svg";
+import map from "@/assets/map-pin.svg";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -141,26 +148,40 @@ export default function Add() {
               : "Cadastrar Cliente"}
           </h1>
         </div>
-        <div className="p-6 bg-[#27272A] w-full rounded-md">
+        <div className="p-6 bg-[#18181B] w-full rounded-md">
           <form onSubmit={handleSubmit(handleFormSubmit)}>
             <div className="flex flex-col gap-4">
               <div className="flex gap-4">
-                <div className="flex flex-col w-full">
-                  <Input
-                    className="border-[#3F3F46] text-white"
-                    placeholder="Nome *"
-                    {...register("name")}
-                  />
+                <div className="flex flex-col w-full ">
+                  <div className="w-full relative">
+                    <Input
+                      className="border-[#3F3F46] text-white px-4 py-3"
+                      placeholder="Nome *"
+                      {...register("name")}
+                    />
+                    <Image
+                      className="absolute right-2 top-[20%] "
+                      src={cursorText}
+                      alt="Cursor"
+                    />
+                  </div>
                   <span className="text-red-500 text-sm">
                     {errors?.name?.message}
                   </span>
                 </div>
-                <div className="flex flex-col w-full">
-                  <Input
-                    className="border-[#3F3F46] text-white"
-                    placeholder="E-mail *"
-                    {...register("email")}
-                  />
+                <div className="flex flex-col w-full ">
+                  <div className="w-full relative">
+                    <Input
+                      className="border-[#3F3F46] text-white px-4 py-3"
+                      placeholder="E-mail *"
+                      {...register("email")}
+                    />
+                    <Image
+                      className="absolute right-2 top-[20%] "
+                      src={mail}
+                      alt="E-mail"
+                    />
+                  </div>
                   <span className="text-red-500 text-sm">
                     {errors?.email?.message}
                   </span>
@@ -168,34 +189,55 @@ export default function Add() {
               </div>
 
               <div className="flex gap-4">
-                <div className="flex flex-col w-full">
-                  <Input
-                    className="border-[#3F3F46] text-white"
-                    placeholder="Telefone *"
-                    {...register("phone")}
-                  ></Input>
+                <div className="flex flex-col w-full ">
+                  <div className="w-full relative">
+                    <Input
+                      className="border-[#3F3F46] text-white px-4 py-3"
+                      placeholder="Telefone *"
+                      {...register("phone")}
+                    ></Input>
+                    <Image
+                      className="absolute right-2 top-[20%] "
+                      src={phone}
+                      alt="Telefone"
+                    />
+                  </div>
                   <span className="text-red-500 text-sm">
                     {errors?.phone?.message}
                   </span>
                 </div>
-                <div className="flex flex-col w-full">
-                  <Input
-                    className="border-[#3F3F46] text-white"
-                    placeholder="Data de nascimento *"
-                    {...register("birthdate")}
-                  />
+                <div className="flex flex-col w-full relative">
+                  <div className="w-full relative">
+                    <Input
+                      className="border-[#3F3F46] text-white px-4 py-3"
+                      placeholder="Data de nascimento *"
+                      {...register("birthdate")}
+                    />
+                    <Image
+                      className="absolute right-2 top-[20%] "
+                      src={calendar}
+                      alt="Calendário"
+                    />
+                  </div>
                   <span className="text-red-500 text-sm">
                     {errors?.birthdate?.message}
                   </span>
                 </div>
               </div>
               <div className="w-full">
-                <div className="flex flex-col w-full">
-                  <Input
-                    className="border-[#3F3F46] text-white"
-                    placeholder="Endereço *"
-                    {...register("address")}
-                  />
+                <div className="flex flex-col w-full ">
+                  <div className="w-full relative">
+                    <Input
+                      className="border-[#3F3F46] text-white px-4 py-3"
+                      placeholder="Endereço *"
+                      {...register("address")}
+                    />
+                    <Image
+                      className="absolute right-2 top-[20%] "
+                      src={map}
+                      alt="Mapa"
+                    />
+                  </div>
                   <span className="text-red-500 text-sm">
                     {errors?.address?.message}
                   </span>

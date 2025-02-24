@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -42,10 +41,6 @@ export default function Home() {
     try {
       setIsLoading(true);
       const result = await api.get("/users");
-
-      if (result.status != 200) {
-        throw new Error();
-      }
 
       setUsers(result.data);
     } catch (err: any) {
@@ -126,20 +121,20 @@ export default function Home() {
     <div className="w-full">
       <div className="p-8 w-full">
         <h1 className="font-semibold text-3xl mb-8">Clientes</h1>
-        <div className="p-6 bg-[#27272A] w-full rounded-md">
-          <div className="flex justify-between">
+        <div className="p-6 bg-[#18181B] w-full rounded-md">
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-0 justify-between flex-wrap">
             <div>
               <Input
-                className="text-white border-[#3F3F46] min-w-[358]"
+                className="text-white border-[#3F3F46]  sm:min-w-[358]"
                 placeholder="Pesquise por nome ou email"
                 {...register("search")}
               />
             </div>
             <div className="">
               <Dialog>
-                <DialogTrigger>
+                <DialogTrigger asChild>
                   <Button
-                    // onClick={deleteUsers}
+                    type="button"
                     className="bg-[#DC2626] text-white flex gap-2 font-semibold text-base"
                   >
                     Excluir Selecionados
@@ -154,10 +149,26 @@ export default function Home() {
                     </DialogTitle>
                   </DialogHeader>
                   <hr />
-                  <div className="flex items-center space-x-2"></div>
+                  <div className="">
+                    <p>
+                      Tem certeza de que deseja excluir permanentemente os
+                      clientes{" "}
+                      {selectedIds.map((value, index) => {
+                        return (
+                          <span className="text-[#DC2626]">
+                            {value.original.name}{" "}
+                            {index < selectedIds.length - 1 && ", "}
+                          </span>
+                        );
+                      })}{" "}
+                      ? Esta ação não pode ser desfeita e todos os dados
+                      relacionados ao cliente, incluindo histórico de
+                      empréstimos e faturas, serão removidos permanentemente.
+                    </p>
+                  </div>
                   <hr />
                   <DialogFooter className="flex justify-end">
-                    <DialogClose asChild className="">
+                    <DialogClose asChild>
                       <Button
                         type="button"
                         className="bg-[#475569] text-white text-base"
@@ -169,6 +180,8 @@ export default function Home() {
                       className="bg-[#dc2626] text-white text-base"
                       type="button"
                       variant="secondary"
+                      onClick={deleteUsers}
+                      disabled={selectedIds.length <= 0 ? true : false}
                     >
                       <Image src={trash} alt="Excluir" /> Deletar
                     </Button>
@@ -182,7 +195,7 @@ export default function Home() {
               columns={columns}
               data={users}
               onChangeSelectedIds={onChangeSelectedIds}
-              isLoading
+              isLoading={isLoading}
             />
           </div>
         </div>
